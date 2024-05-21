@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { ProductModel } from "./product.model";
-import { productSchema } from "./product.validation";
-import { ProductInput } from "./product.validation";
+import { zodProductSchema } from "./product.validation";
+import { ProductValidation } from "./product.validation";
 import { productServices } from "./product.service";
+import { Product } from "./product.interface";
 
 export const createProduct = async (
   req: Request,
@@ -10,14 +11,14 @@ export const createProduct = async (
   next: NextFunction
 ) => {
   try {
-    const validationResult = productSchema.safeParse(req.body);
+    const validationResult = zodProductSchema.safeParse(req.body);
     if (!validationResult.success) {
       return res.status(400).json({
         success: false,
         message: validationResult.error.errors[0].message,
       });
     }
-    const productData: ProductInput = validationResult.data;
+    const productData: ProductValidation = validationResult.data;
     const result = await productServices.createProductInDB(productData);
 
     res.status(201).json({
@@ -46,8 +47,74 @@ const getAllProducts = async (
     next(error);
   }
 };
+// Retrieve a specific product by ID
+const getProductById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productId } = req.params;
+    const result = await productServices.getProductByIdFromDB(productId);
+    // product not found
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Product not found",
+        data: null,
+      });
+    }
+    // product found response
+    res.status(200).json({
+      success: true,
+      message: "Product fetched successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+// Update a product
+const updateProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productId } = req.params;
+    const validationResult = zodProductSchema.safeParse(req.body);
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: validationResult.error.errors[0].message,
+        data: null,
+      });
+    }
+    const productData: ProductValidation = validationResult.data;
+    const result = await productServices.updateProductInDB(
+      productId,
+      productData
+    );
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found!",
+        data: null,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully!",
+      data: result,
+    });
+  } catch (error) {}
+};
+// Delete a product
+// Search products
 
 export const productControllers = {
   createProduct,
   getAllProducts,
+  getProductById,
+  updateProduct,
 };

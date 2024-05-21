@@ -10,7 +10,7 @@ const inventorySchema = z.object({
   inStock: z.boolean(),
 });
 
-export const productSchema = z.object({
+export const zodProductSchema = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number(),
@@ -20,4 +20,4 @@ export const productSchema = z.object({
   inventory: inventorySchema,
 });
 
-export type ProductInput = z.infer<typeof productSchema>;
+export type ProductValidation = z.infer<typeof zodProductSchema>;

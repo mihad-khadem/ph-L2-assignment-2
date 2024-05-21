@@ -10,7 +10,9 @@ router.post("/", productControllers.createProduct);
 // Retrieve all products
 router.get("/", productControllers.getAllProducts);
 // Retrieve a specific product by ID
-// Update a product
+router.get("/:productId", productControllers.getProductById);
+// Update a product using id
+router.put("/:productId", productControllers.updateProduct);
 // Delete a product
 // Search products
 

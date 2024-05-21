@@ -110,11 +110,58 @@ const updateProduct = async (
   } catch (error) {}
 };
 // Delete a product
+const deleteProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productId } = req.params;
+    const result = await productServices.deleteProductInDB(productId);
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found!",
+        data: null,
+      });
+    }
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: "Product deleted successfully!",
+        data: null,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 // Search products
+const searchProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const searchTerm = req.query.searchTerm as string;
+    // Implement search logic here
+    const result = await productServices.searchProductsInDB(searchTerm);
+    if (!result) {
+      console.log(result, "from search controller");
+    }
+    res.status(200).json({
+      success: true,
+      message: "Products fetched successfully",
+      data: result,
+    });
+  } catch (error) {}
+};
 
 export const productControllers = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
+  deleteProduct,
+  searchProducts,
 };

@@ -29,9 +29,32 @@ const updateProductInDB = async (
   });
   return result;
 };
+// delete a product
+const deleteProductInDB = async (productId: string) => {
+  const result = await ProductModel.findByIdAndDelete(productId);
+  return result;
+};
+// search products
+const searchProductsInDB = async (searchTerm: string) => {
+  const regex = new RegExp(searchTerm, "i");
+  console.log(regex, "from service");
+  const result = await ProductModel.find({
+    $or: [
+      { name: { $regex: regex } },
+      { description: { $regex: regex } },
+      { price: { $regex: regex } },
+      { category: { $regex: regex } },
+      { tags: { $regex: regex } },
+    ],
+  });
+  return result;
+};
+
 export const productServices = {
   createProductInDB,
   getAllProductsFromDB,
   getProductByIdFromDB,
   updateProductInDB,
+  deleteProductInDB,
+  searchProductsInDB,
 };

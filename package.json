@@ -4,6 +4,7 @@
   "description": "Develop a Express application with TypeScript as the programming language, integrating MongoDB with Mongoose for effective data management. Ensure data integrity through validation using Joi/Zod.",
   "main": "index.js",
   "scripts": {
+    "build" : "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

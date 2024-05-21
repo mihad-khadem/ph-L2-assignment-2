@@ -8,6 +8,7 @@ const router = express.Router();
 router.post("/", productControllers.createProduct);
 
 // Retrieve all products
+router.get("/", productControllers.getAllProducts);
 // Retrieve a specific product by ID
 // Update a product
 // Delete a product

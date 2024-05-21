@@ -29,7 +29,25 @@ export const createProduct = async (
     next(error);
   }
 };
+// Retrieve All Products
+const getAllProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const result = await productServices.getAllProductsFromDB();
+    res.status(200).json({
+      success: true,
+      message: "Products fetched successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const productControllers = {
   createProduct,
+  getAllProducts,
 };

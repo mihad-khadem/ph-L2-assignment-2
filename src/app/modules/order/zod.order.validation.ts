@@ -13,13 +13,17 @@ const zodOrderSchema = z.object({
     required_error: "productId is required",
     invalid_type_error: "productId must be a string",
   }),
-  price: z.number({
-    required_error: "price is required",
-    invalid_type_error: "price must be a number",
-  }),
-  quantity: z.number({
-    required_error: "quantity is required",
-    invalid_type_error: "quantity must be a number",
-  }),
+  price: z
+    .number({
+      required_error: "price is required",
+      invalid_type_error: "price must be a number",
+    })
+    .min(0, { message: "price must be a non-negative number" }),
+  quantity: z
+    .number({
+      required_error: "quantity is required",
+      invalid_type_error: "quantity must be a number",
+    })
+    .min(0, { message: "quantity must be a non-negative number" }),
 });
 export default zodOrderSchema;

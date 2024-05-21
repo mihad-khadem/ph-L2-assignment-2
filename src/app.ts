@@ -7,7 +7,7 @@ import orderRoutes from "./app/modules/order/order.route";
 // Application
 const app: Application = express();
 
-// express middleware
+// express middlewares
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));

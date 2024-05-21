@@ -35,6 +35,7 @@ const getAllOrders = async (
     const email = req.query.email as string;
     if (email) {
       const result = await orderServices.getOrdersByEmailFromDB(email);
+
       res.status(200).json({
         success: true,
         message: "Orders fetched successfully",

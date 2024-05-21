@@ -15,7 +15,5 @@ router.get("/:productId", productControllers.getProductById);
 router.put("/:productId", productControllers.updateProduct);
 // Delete a product
 router.delete("/:productId", productControllers.deleteProduct);
-// Search products
-router.get("/searchTerm", productControllers.searchProducts);
 
 export default router;

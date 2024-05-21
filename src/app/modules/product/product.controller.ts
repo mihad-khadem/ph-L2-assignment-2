@@ -37,12 +37,25 @@ const getAllProducts = async (
   next: NextFunction
 ) => {
   try {
-    const result = await productServices.getAllProductsFromDB();
-    res.status(200).json({
-      success: true,
-      message: "Products fetched successfully",
-      data: result,
-    });
+    const searchTerm = req.query.searchTerm as string;
+
+    if (searchTerm) {
+      // Search logic here
+      const result = await productServices.searchProductsInDB(searchTerm);
+      return res.status(200).json({
+        success: true,
+        message: "Products fetched successfully",
+        data: result,
+      });
+    } else {
+      // Get all products if no search term
+      const result = await productServices.getAllProductsFromDB();
+      return res.status(200).json({
+        success: true,
+        message: "Products fetched successfully",
+        data: result,
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -136,26 +149,6 @@ const deleteProduct = async (
     next(error);
   }
 };
-// Search products
-const searchProducts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const searchTerm = req.query.searchTerm as string;
-    // Implement search logic here
-    const result = await productServices.searchProductsInDB(searchTerm);
-    if (!result) {
-      console.log(result, "from search controller");
-    }
-    res.status(200).json({
-      success: true,
-      message: "Products fetched successfully",
-      data: result,
-    });
-  } catch (error) {}
-};
 
 export const productControllers = {
   createProduct,
@@ -163,5 +156,4 @@ export const productControllers = {
   getProductById,
   updateProduct,
   deleteProduct,
-  searchProducts,
 };

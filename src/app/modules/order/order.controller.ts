@@ -25,6 +25,40 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
+// get all orders & search orders by email
+const getAllOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const email = req.query.email as string;
+    if (email) {
+      const result = await orderServices.getOrdersByEmailFromDB(email);
+      res.status(200).json({
+        success: true,
+        message: "Orders fetched successfully",
+        data: result,
+      });
+    } else if (!email) {
+      const result = await orderServices.getAllOrdersFromDB();
+      res.status(200).json({
+        success: true,
+        message: "Orders fetched successfully",
+        data: result,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Invalid request",
+        data: null,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 export const orderControllers = {
   createOrder,
+  getAllOrders,
 };

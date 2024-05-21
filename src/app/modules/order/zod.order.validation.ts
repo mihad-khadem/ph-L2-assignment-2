@@ -6,7 +6,9 @@ const zodOrderSchema = z.object({
       required_error: "email is required",
       invalid_type_error: "email must be a string",
     })
-    .email(),
+    .email({
+      message: "email must be a valid email",
+    }),
   productId: z.string({
     required_error: "productId is required",
     invalid_type_error: "productId must be a string",
